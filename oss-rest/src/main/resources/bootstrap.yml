@@ -1,0 +1,14 @@
+spring:
+  profiles:
+    active: ${SPRING_CONFIG_PROFILE:dev}
+  application:
+    name: ${SPRING_APPLICATION_NAME:cloud_doc}
+  cloud:
+    config:
+      label: ${SPRING_CONFIG_LABEL:master}
+      uri: ${SPRING_CONFIG_URI:}
+
+app:
+  session:
+    cookieKey: _doc_cs
+    cookieSessionEncode: 'false'

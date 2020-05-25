@@ -1,0 +1,56 @@
+app:
+  globalParams:
+    loginUrl: /oauth2/login/cloud
+    logoutUrl: /logout
+    ossIp: '192.168.203.146:9988/api/oss/upload'
+
+  oss:
+    ip: '192.168.203.146'
+    rootDirectory: 'D:/Temp/uploadFile/'
+
+  dao:
+    dataSource:
+      driverClass: org.postgresql.Driver
+      password: 123456
+      url: jdbc:postgresql://10.1.1.147:5432/demo?useUnicode=true&characterEncoding=utf-8&autoReconnect=true
+      username: postgres
+#      driverClass: org.postgresql.Driver
+#      password: 123qwe
+#      url: jdbc:postgresql://10.7.201.181:5432/oss?useUnicode=true&characterEncoding=utf-8&autoReconnect=true
+#      username: postgres
+    jpa:
+      showSql: true
+  secure:
+    auth:
+      urlAuths:
+        - filter: anon
+          url: /**
+    referer:
+      enable: 'false'
+    sso:
+      enable: 'true'
+      oauth2Configs:
+        - authorizationUri: http://119.188.115.251:90/oauth/authorize
+          clientId: test
+          clientName: document服务
+          clientSecret: test
+          frontPageUrl: http://localhost:9527
+          redirectUriTemplate: http://119.188.115.251:50/oauth2/login
+          registrationId: cloud
+          tokenUri: http://119.188.115.251:50/oauth/token
+          userInfoUri: http://119.188.115.251:50/oauth/userinfo
+  session:
+    cookieKey: _demo_cs
+    cookieSessionEncode: 'false'
+
+
+spring:
+  redis:
+    database: '2'
+    host: 10.1.1.147
+    port: '6379'
+
+server:
+  port: 9988
+
+
