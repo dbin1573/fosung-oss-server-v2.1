@@ -1,10 +1,8 @@
 package com.fosung.cloud.oss.service;
 
 import com.fosung.cloud.oss.dao.OssFileDao;
-import com.fosung.cloud.oss.dto.OssFileQueryParam;
 import com.fosung.cloud.oss.entity.OssFile;
 import com.fosung.framework.dao.support.service.jpa.AppJPABaseDataServiceImpl;
-import com.mzlion.core.lang.Assert;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -50,8 +48,17 @@ public class OssFileService extends AppJPABaseDataServiceImpl<OssFile, OssFileDa
 
     @Transactional
     public void saveDirectory(OssFile ossFile) {
+        dirDataInit(ossFile);
         this.save(ossFile);
 
-        ossFileOption.createDir(ossFile.getBucketName(),ossFile.getDirectory(),ossFile.getName());
+        ossFileOption.createDir(ossFile.getBucketName(), ossFile.getDirectory(), ossFile.getName());
+    }
+
+    private void dirDataInit(OssFile ossFile) {
+        ossFile.setSize(0);
+        ossFile.setType("dir");
+
+        String path = ossFile.getPath();
+        ossFile.setPath(StringUtils.isBlank(path) ? "/" : path);
     }
 }

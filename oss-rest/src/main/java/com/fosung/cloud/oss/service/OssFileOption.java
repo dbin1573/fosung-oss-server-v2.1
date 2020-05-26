@@ -105,7 +105,7 @@ public class OssFileOption {
      */
     public boolean createDir(String dirName) {
         String path = isEndBreak(OSS_ROOT_PATH) + dirName;
-        File file = new File(dirName);
+        File file = new File(path);
 
         return createDir(file);
     }
@@ -285,10 +285,14 @@ public class OssFileOption {
 
     public boolean deleteDir(String pathName) {
         Assert.notNull(OSS_ROOT_PATH, "application*.yml没有配置oss的根路径OSS_ROOT_PATH");
-        Assert.isTrue(StringUtils.isNotBlank(pathName),"路径名为空");
+        Assert.isTrue(StringUtils.isNotBlank(pathName), "路径名为空");
 
         String path = isEndBreak(OSS_ROOT_PATH) + isSpace(pathName);
         File file = new File(path);
+        boolean notExist = !file.exists();
+        if (notExist) {
+            return true;
+        }
         return file.delete();
     }
 

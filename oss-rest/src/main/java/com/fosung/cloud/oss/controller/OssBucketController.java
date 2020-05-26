@@ -6,7 +6,6 @@ import com.fosung.cloud.oss.service.OssBucketService;
 import com.fosung.framework.common.dto.UtilDTO;
 import com.fosung.framework.web.http.AppIBaseController;
 import com.fosung.framework.web.http.ResponseParam;
-import com.google.common.collect.Sets;
 import com.mzlion.core.lang.Assert;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -80,9 +79,9 @@ public class OssBucketController extends AppIBaseController {
         Assert.isTrue(StringUtils.isBlank(ossBucket.getName()), "bucket的业务name不能为空");
 
         OssBucket bucketInfo = ossBucketService.get(ossBucket.getId());
-        Assert.notNull(bucketInfo,"bucketInfo为空");
-        ossBucket.setName(bucketInfo.getName());
-        ossBucketService.deleteBucket(ossBucket);
+        Assert.notNull(bucketInfo, "bucketInfo为空");
+
+        ossBucketService.deleteBucket(bucketInfo);
 
         return ResponseParam.success();
     }

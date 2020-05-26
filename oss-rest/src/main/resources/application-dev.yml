@@ -5,19 +5,24 @@ app:
     ossIp: '192.168.203.146:9988/api/oss/upload'
 
   oss:
-    ip: '192.168.203.146'
+#    ip: '192.168.203.146'
+    ip: '192.168.1.4'
     rootDirectory: 'D:/Temp/uploadFile/'
 
   dao:
     dataSource:
       driverClass: org.postgresql.Driver
-      password: 123456
+      #      driverClass: com.mysql.cj.jdbc.Driver
       url: jdbc:postgresql://10.1.1.147:5432/demo?useUnicode=true&characterEncoding=utf-8&autoReconnect=true
+      #      url: jdbc:mysql://127.0.0.1:3306/demo?serverTimezone=UTC&useUnicode=true&characterEncoding=utf8&useSSL=false
       username: postgres
-#      driverClass: org.postgresql.Driver
-#      password: 123qwe
-#      url: jdbc:postgresql://10.7.201.181:5432/oss?useUnicode=true&characterEncoding=utf-8&autoReconnect=true
-#      username: postgres
+      #      username: root
+      password: 123456
+
+    #      driverClass: org.postgresql.Driver
+    #      password: 123qwe
+    #      url: jdbc:postgresql://10.7.201.181:5432/oss?useUnicode=true&characterEncoding=utf-8&autoReconnect=true
+    #      username: postgres
     jpa:
       showSql: true
   secure:

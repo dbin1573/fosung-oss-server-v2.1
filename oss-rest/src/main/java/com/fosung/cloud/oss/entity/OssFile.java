@@ -37,13 +37,15 @@ public class OssFile extends AppJpaBaseEntity {
     String name;
 
     @Column(name = "size")
-    Integer size;
+    Integer size = 0;
+
+    /*文件大小单位*/
 
     /**
      * 区分目录还是文件 (file/dir)
      */
     @Column(name = "type")
-    String type="file";
+    String type = "file";
 
     @Column(name = "path")
     String path;
