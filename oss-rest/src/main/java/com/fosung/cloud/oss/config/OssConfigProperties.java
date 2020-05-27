@@ -1,7 +1,6 @@
 package com.fosung.cloud.oss.config;
 
-import lombok.Getter;
-import lombok.Setter;
+import lombok.Data;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.stereotype.Component;
 
@@ -10,8 +9,7 @@ import org.springframework.stereotype.Component;
  * @Date 2020/5/22 17:02
  **/
 
-@Getter
-@Setter
+@Data
 @Component
 @ConfigurationProperties(prefix = "app.oss")
 public class OssConfigProperties {

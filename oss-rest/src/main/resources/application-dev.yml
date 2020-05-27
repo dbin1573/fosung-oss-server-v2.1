@@ -5,8 +5,7 @@ app:
     ossIp: '192.168.203.146:9988/api/oss/upload'
 
   oss:
-#    ip: '192.168.203.146'
-    ip: '192.168.1.4'
+    ip: '192.168.203.146'
     rootDirectory: 'D:/Temp/uploadFile/'
 
   dao:

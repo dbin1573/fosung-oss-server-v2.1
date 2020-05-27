@@ -25,35 +25,9 @@ public class OssFileOption {
     @Autowired
     private OssConfigProperties ossConfigProperties;
 
-    //    private String OSS_ROOT_PATH = ossConfigProperties.getRootDirectory();
-//    private String OSS_IP = ossConfigProperties.getIp();
-    private String OSS_ROOT_PATH = "D:/Temp/uploadFile/";
-    private String OSS_IP = "192.168.203.146";
-//    @Value("${app.oss.rootDirectory}")
-//    private String OSS_ROOT_PATH;
-//    @Value("${app.oss.id}")
-//    private String OSS_IP;
-
-
     @Autowired
     private OssFileService ossFileService;
 
-
-    /**
-     * todo 初始化时 check OSS_ROOT_PATH和 OSS_IP是否有 /
-     */
-
-    public static void main(String[] args) {
-        // 目录a.txt
-        String rootPath = "D:/Temp/uploadFile/a.txt";
-        File file = new File(rootPath);
-        String newPath = "D:/Temp/uploadFile/a.txt1";
-
-//        file.mkdirs();
-        file.renameTo(new File(newPath));
-//        file.delete();
-//        file.deleteOnExit();
-    }
 
     /**
      * 保存返回url
@@ -106,6 +80,7 @@ public class OssFileOption {
      * @param dirName 目录名
      */
     public boolean createDir(String dirName) {
+        String OSS_ROOT_PATH = ossConfigProperties.getRootDirectory();
         String path = isEndBreak(OSS_ROOT_PATH) + dirName;
         File file = new File(path);
 
@@ -163,7 +138,8 @@ public class OssFileOption {
      * @return
      */
     private String getFileUrl(String relativePath) {
-        Assert.notNull(OSS_IP, "application*.yml没有配置oss的id");
+        String OSS_IP = ossConfigProperties.getIp();
+        Assert.notNull(OSS_IP, "application*.yml没有配置oss的ip");
 
         return isEndBreak(OSS_IP) + relativePath;
 
@@ -171,7 +147,7 @@ public class OssFileOption {
 
     private String getFileType(String name) {
 
-        return name.substring(name.lastIndexOf("."));
+        return name.substring(name.lastIndexOf(".") + 1);
     }
 
     /**
@@ -182,6 +158,7 @@ public class OssFileOption {
      * @return
      */
     private String getFilPath(String bucket, String directory, String fileName, Boolean relativePath) {
+        String OSS_ROOT_PATH = ossConfigProperties.getRootDirectory();
         StringBuilder pathName = new StringBuilder();
         if (!relativePath) {
             Assert.notNull(OSS_ROOT_PATH, "application*.yml没有配置oss的根路径OSS_ROOT_PATH");
@@ -194,20 +171,6 @@ public class OssFileOption {
         return pathName.toString();
     }
 
-
-
-
-
-/*    @Transactional
-    void one(String string) {
-        System.out.println(string);
-        two("two");
-        int a = 1 / 0;
-    }
-
-    void two(String string) {
-        System.out.println(string);
-    }*/
 
     /**
      * 绝对路径:(保存\删除)
@@ -295,13 +258,13 @@ public class OssFileOption {
 
         if (file.exists()) {
             return file.delete();
-//            return true;
         }
 
         return false;
     }
 
     public boolean deleteDir(String pathName) {
+        String OSS_ROOT_PATH = ossConfigProperties.getRootDirectory();
         Assert.notNull(OSS_ROOT_PATH, "application*.yml没有配置oss的根路径OSS_ROOT_PATH");
         Assert.isTrue(StringUtils.isNotBlank(pathName), "路径名为空");
 
@@ -315,6 +278,7 @@ public class OssFileOption {
     }
 
     public boolean rename(String pathName, String newName) {
+        String OSS_ROOT_PATH = ossConfigProperties.getRootDirectory();
         Assert.notNull(OSS_ROOT_PATH, "application*.yml没有配置oss的根路径OSS_ROOT_PATH");
 
         String path = isEndBreak(OSS_ROOT_PATH) + isSpace(pathName);
