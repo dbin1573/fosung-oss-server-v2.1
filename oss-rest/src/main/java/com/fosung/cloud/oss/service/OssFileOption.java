@@ -242,7 +242,7 @@ public class OssFileOption {
         searchParam.put("directory", directory);
         searchParam.put("name", originalFilename);
         boolean notExist = !ossFileService.isExist(searchParam);
-        Assert.isTrue(notExist,"上传失败: 当前目录下 已存在");
+        Assert.isTrue(notExist, "上传失败: 当前目录下 该文件已存在");
 
     }
 

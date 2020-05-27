@@ -18,7 +18,7 @@
             <!--action="https://jsonplaceholder.typicode.com/posts/"-->
     <el-upload
             class="upload-demo"
-            action="http://dbin:9988/api/oss/single/test/upload"
+            action="http://dbin:9988/api/oss/single/test/upload?directory=dbin/info"
             :on-preview="handlePreview"
             :on-remove="handleRemove"
             :file-list="fileList"
@@ -31,7 +31,7 @@
 
     <el-upload
             class="upload-demo"
-            action="http://dbin:9988/api/oss/single/sys-oss/upload"
+            :action="ossUpload"
             :on-preview="handlePreview"
             :on-remove="handleRemove"
             :file-list="fileList"
@@ -52,7 +52,11 @@
             fileList: [
                 // {name: 'food.jpeg',
                 // url: 'https://fuss10.elemecdn.com/3/63/4e7f3a15429bfda99bce42a18cdd1jpeg.jpeg?imageMogr2/thumbnail/360x360/format/webp/quality/100'}
-            ]
+            ],
+            ossUpload: "http://dbin:9988/api/oss/single/sys-oss/iupload"
+        },
+        created() {
+            this.ossUpload += "?directory=dbin/info"
         },
         methods: {
             handleRemove(file, fileList) {

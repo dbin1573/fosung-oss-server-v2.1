@@ -40,25 +40,14 @@ public class OssFileApi extends OssBaseController {
     @SneakyThrows
     @RequestMapping("/upload")
     public ResponseParam upload(@PathVariable String bucket,
-                                @RequestParam(value = "name", required = false) String path,
+                                @RequestParam(value = "directory", required = false, defaultValue = "/") String directory,
                                 @RequestParam(value = "file") MultipartFile multipartFile) {
 
-        String url = ossFileOption.saveFile(bucket, "/", multipartFile);
+        String url = ossFileOption.saveFile(bucket, directory, multipartFile);
 
         return ResponseParam.success().data(url);
     }
 
-    @SneakyThrows
-    @RequestMapping("/iupload")
-    public ResponseParam upload1(@PathVariable String bucket,
-                                @RequestParam(value = "path", required = false ,defaultValue = "/") String ipath,
-                                @RequestParam(value = "name", required = false) String path,
-                                @RequestParam(value = "file") MultipartFile multipartFile) {
-
-        String url = ossFileOption.saveFile(bucket, "/", multipartFile);
-
-        return ResponseParam.success().data(url);
-    }
 
 
 
