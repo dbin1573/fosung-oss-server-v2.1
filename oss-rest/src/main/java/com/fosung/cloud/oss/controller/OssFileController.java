@@ -6,6 +6,7 @@ import com.fosung.cloud.oss.service.OssFileService;
 import com.fosung.framework.common.dto.UtilDTO;
 import com.fosung.framework.web.http.AppIBaseController;
 import com.fosung.framework.web.http.ResponseParam;
+import com.google.common.collect.Sets;
 import com.mzlion.core.lang.Assert;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -37,8 +38,11 @@ public class OssFileController extends AppIBaseController {
     @RequestMapping(value = "/query")
     public ResponseParam query(@RequestBody OssFileQueryParam ossFileQueryParam) {
         Assert.notNull(ossFileQueryParam.getBucketName(), "业务bucketName不能为空");
+        if (StringUtils.isBlank(ossFileQueryParam.getDirectory())) {
+            ossFileQueryParam.setDirectory("/");
+        }
 
-        Map<String, Object> queryParam = UtilDTO.toDTOExcludeFields(ossFileQueryParam, null);
+        Map<String, Object> queryParam = UtilDTO.toDTO(ossFileQueryParam, Sets.newHashSet("bucketName","directory"));
 
         Page<OssFile> ossFiles = ossFileService.queryByPage(queryParam, ossFileQueryParam.getPageNum(), ossFileQueryParam.getPageSize());
 
@@ -48,12 +52,12 @@ public class OssFileController extends AppIBaseController {
 
     }
 
-    /**
+/*    *//**
      * 列表树
      *
      * @param ossFileQueryParam
      * @return
-     */
+     *//*
     @RequestMapping(value = "/lazy/list")
     public ResponseParam tree(@RequestBody OssFileQueryParam ossFileQueryParam) {
         Assert.notNull(ossFileQueryParam.getBucketName(), "业务bucketName不能为空");
@@ -68,7 +72,7 @@ public class OssFileController extends AppIBaseController {
         return ResponseParam.success()
                 .pageParam(ossFiles)
                 .datalist(ossFiles);
-    }
+    }*/
 
     /**
      * 请求返回
@@ -96,7 +100,8 @@ public class OssFileController extends AppIBaseController {
 
     @RequestMapping(value = "/dir/create")
     public ResponseParam save(@RequestBody OssFile ossFile) {
-//        Assert.notNull(ossFile.getId(), "业务id不能为空");
+        Assert.notNull(ossFile.getBucketName(), "业务bucketName不能为空");
+        Assert.notNull(ossFile.getName(),"名称name不能为空");
 
         ossFileService.saveDirectory(ossFile);
 
@@ -110,8 +115,10 @@ public class OssFileController extends AppIBaseController {
      */
     @RequestMapping(value = "/delete")
     public ResponseParam delete(@RequestBody OssFile ossFile) {
-        Assert.notNull(ossFile.getId(), "业务id不能为空");
+        Long id = ossFile.getId();
+        Assert.notNull(id, "业务id不能为空");
 
+        ossFile = ossFileService.get(id);
         ossFileService.deleteOssFile(ossFile);
 
         return ResponseParam.success();

@@ -37,7 +37,7 @@ public class OssFile extends AppJpaBaseEntity {
     String name;
 
     @Column(name = "size")
-    Integer size = 0;
+    Long size = 0L;
 
     /*文件大小单位*/
 

@@ -22,10 +22,10 @@ public class OssFileService extends AppJPABaseDataServiceImpl<OssFile, OssFileDa
     Map<String, String> queryExpressions = new HashMap<String, String>() {
         {
             put("id", "id:EQ");
-            put("name", "name:LLIKE");
+            put("name", "name:EQ");
             put("bucketName", "bucketName:EQ");
             put("directory", "directory:EQ");
-            put("path", "path:LLIKE");
+
 
         }
     };
@@ -41,8 +41,9 @@ public class OssFileService extends AppJPABaseDataServiceImpl<OssFile, OssFileDa
     public void deleteOssFile(OssFile ossFile) {
 
         this.entityDao.delete(ossFile);
+
         //调用文件删除
-        ossFileOption.deleteFile(ossFile.getBucketName(),ossFile.getPath(),ossFile.getName());
+        ossFileOption.deleteFile(ossFile.getBucketName(), ossFile.getDirectory(), ossFile.getName());
 
     }
 
@@ -55,10 +56,13 @@ public class OssFileService extends AppJPABaseDataServiceImpl<OssFile, OssFileDa
     }
 
     private void dirDataInit(OssFile ossFile) {
-        ossFile.setSize(0);
+        ossFile.setSize(0L);
         ossFile.setType("dir");
 
+        String bucket = ossFile.getBucketName();
+        String directory = ossFile.getDirectory();
         String path = ossFile.getPath();
-        ossFile.setPath(StringUtils.isBlank(path) ? "/" : path);
+        ossFile.setDirectory(StringUtils.isBlank(directory) ? "/" : directory);
+        ossFile.setPath(StringUtils.isBlank(path) ? bucket + "/" : path);
     }
 }

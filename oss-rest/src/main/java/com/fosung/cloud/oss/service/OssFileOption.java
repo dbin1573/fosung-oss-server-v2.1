@@ -2,6 +2,7 @@ package com.fosung.cloud.oss.service;
 
 import com.fosung.cloud.oss.config.OssConfigProperties;
 import com.fosung.cloud.oss.entity.OssFile;
+import com.google.common.collect.Maps;
 import com.mzlion.core.lang.Assert;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,6 +12,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.Map;
 
 /**
  * @Author hi dbin
@@ -80,7 +82,7 @@ public class OssFileOption {
 
         String url = getFileUrl(relativePath);
 
-        this.saveOssFile(directory, relativePath, url, multipartFile);
+        this.saveOssFile(bucket,directory, relativePath, url, multipartFile);
 
         return url;
     }
@@ -216,18 +218,32 @@ public class OssFileOption {
      * @param url           访问的url(其中是相对路径)
      * @param multipartFile 文件
      */
-    private void saveOssFile(String directory, String relativePath, String url, MultipartFile multipartFile) {
+    private void saveOssFile(String bucket,String directory, String relativePath, String url, MultipartFile multipartFile) {
         OssFile ossFile = new OssFile();
 
-        ossFile.setDirectory(directory);
+        ossFile.setBucketName(bucket);
+        ossFile.setDirectory(StringUtils.isBlank(directory)?"/":directory);
         ossFile.setPath(relativePath);
         ossFile.setUrl(url);
         ossFile.setType("file");
 
         Assert.notNull(multipartFile, "保存记录异常,文件为空");
         ossFile.setName(multipartFile.getOriginalFilename());
+        Long size = multipartFile.getSize()/1024;
+        ossFile.setSize(size);
 
+        checkExist(bucket, directory, multipartFile.getOriginalFilename());
         ossFileService.save(ossFile);
+    }
+
+    private void checkExist(String bucket, String directory, String originalFilename) {
+        Map<String,Object> searchParam = Maps.newHashMap();
+        searchParam.put("bucketName", bucket);
+        searchParam.put("directory", directory);
+        searchParam.put("name", originalFilename);
+        boolean notExist = !ossFileService.isExist(searchParam);
+        Assert.isTrue(notExist,"上传失败: 当前目录下 已存在");
+
     }
 
     /**
@@ -270,14 +286,16 @@ public class OssFileOption {
      *                  自动拼接绝对路径
      */
     public boolean deleteFile(String bucket, String directory, String fileName) {
-
+        Assert.notNull(bucket,"bucket为空");
+        Assert.notNull(directory,"directory为空");
+        Assert.notNull(fileName,"fileName为空");
         String absolutePath = getFilPath(bucket, directory, fileName, false);
 
         File file = new File(absolutePath);
 
         if (file.exists()) {
-            file.delete();
-            return true;
+            return file.delete();
+//            return true;
         }
 
         return false;

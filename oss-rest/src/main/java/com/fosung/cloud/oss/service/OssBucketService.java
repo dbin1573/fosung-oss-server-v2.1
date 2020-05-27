@@ -49,8 +49,6 @@ public class OssBucketService extends AppJPABaseDataServiceImpl<OssBucket, OssBu
     @Transactional
     public void deleteBucket(OssBucket ossBucket) {
         this.entityDao.delete(ossBucket);
-//        OssBucket ossBucketInfo = this.get(ossBucket.getId());
-//        Assert.notNull(ossBucketInfo,"目录不存在");
 
         boolean del = ossFileOption.deleteDir(ossBucket.getName());
         Assert.isTrue(del,"删除失败 此目录下可能存在目录或文件");
