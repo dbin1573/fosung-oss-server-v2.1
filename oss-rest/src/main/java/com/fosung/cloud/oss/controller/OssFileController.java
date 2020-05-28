@@ -52,41 +52,6 @@ public class OssFileController extends AppIBaseController {
 
     }
 
-/*    *//**
-     * 列表树
-     *
-     * @param ossFileQueryParam
-     * @return
-     *//*
-    @RequestMapping(value = "/lazy/list")
-    public ResponseParam tree(@RequestBody OssFileQueryParam ossFileQueryParam) {
-        Assert.notNull(ossFileQueryParam.getBucketName(), "业务bucketName不能为空");
-        if (StringUtils.isBlank(ossFileQueryParam.getDirectory())) {
-            ossFileQueryParam.setDirectory("/");
-        }
-        Map<String, Object> searchMap = UtilDTO.toDTOExcludeFields(ossFileQueryParam, null);
-
-        Page<OssFile> ossFiles = ossFileService.queryByPage(searchMap, ossFileQueryParam.getPageNum(), ossFileQueryParam.getPageSize());
-
-
-        return ResponseParam.success()
-                .pageParam(ossFiles)
-                .datalist(ossFiles);
-    }*/
-
-    /**
-     * 请求返回
-     * session 是个对象 会返回sessionId
-     * session 过期重定向到登录/login
-     * 浏览器cookie不用set 服务端可以用response中获取cookie
-     * <p>
-     * redis保存token
-     * <p>
-     * 多个应用:
-     * 其他应用  seeion  共享->登录
-     * <p>
-     * oauth2过程
-     */
 
     @RequestMapping(value = "/get")
     public ResponseParam get(@RequestBody OssFileQueryParam ossFileQueryParam) {

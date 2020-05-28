@@ -2,6 +2,7 @@ package com.fosung.cloud.oss.api;
 
 import com.fosung.cloud.oss.service.OssFileOption;
 import com.fosung.framework.web.http.ResponseParam;
+import com.google.common.collect.ImmutableMap;
 import lombok.SneakyThrows;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -11,6 +12,7 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.File;
+import java.util.Map;
 
 /**
  * @Author hi dbin
@@ -45,7 +47,8 @@ public class OssFileApi extends OssBaseController {
 
         String url = ossFileOption.saveFile(bucket, directory, multipartFile);
 
-        return ResponseParam.success().data(url);
+        Map<String, Object> map = ImmutableMap.of("url", url);
+        return ResponseParam.success().data(map);
     }
 
 

@@ -185,28 +185,30 @@ public class OssFileOption {
         OssFile ossFile = new OssFile();
 
         ossFile.setBucketName(bucket);
-        ossFile.setDirectory(StringUtils.isBlank(directory)?"/":directory);
+        ossFile.setDirectory(StringUtils.isBlank(directory) ? "/" : directory);
         ossFile.setPath(relativePath);
         ossFile.setUrl(url);
         ossFile.setType("file");
 
         Assert.notNull(multipartFile, "保存记录异常,文件为空");
         ossFile.setName(multipartFile.getOriginalFilename());
-        Long size = multipartFile.getSize()/1024;
+        Long size = multipartFile.getSize() / 1024;
         ossFile.setSize(size);
 
-        checkExist(bucket, directory, multipartFile.getOriginalFilename());
-        ossFileService.save(ossFile);
+        boolean notExist = checkNotExist(bucket, directory, multipartFile.getOriginalFilename());
+        if (notExist) {
+            ossFileService.save(ossFile);
+        }
     }
 
-    private void checkExist(String bucket, String directory, String originalFilename) {
-        Map<String,Object> searchParam = Maps.newHashMap();
+    private boolean checkNotExist(String bucket, String directory, String originalFilename) {
+        Map<String, Object> searchParam = Maps.newHashMap();
         searchParam.put("bucketName", bucket);
         searchParam.put("directory", directory);
         searchParam.put("name", originalFilename);
         boolean notExist = !ossFileService.isExist(searchParam);
-        Assert.isTrue(notExist, "上传失败: 当前目录下 该文件已存在");
-
+//        Assert.isTrue(notExist, "上传失败: 当前目录下 该文件已存在");
+        return notExist;
     }
 
     /**
@@ -217,7 +219,7 @@ public class OssFileOption {
      * @return
      */
     public String isEndBreak(String path) {
-        if (StringUtils.isBlank(path)) {
+        if (StringUtils.isBlank(path) || path.equals("/")) {
             return "";
         }
         if (!StringUtils.endsWithAny(path, "/", "\\")) {
