@@ -44,7 +44,7 @@ public class OssFileController extends AppIBaseController {
 
         Map<String, Object> queryParam = UtilDTO.toDTO(ossFileQueryParam, Sets.newHashSet("bucketName","directory"));
 
-        Page<OssFile> ossFiles = ossFileService.queryByPage(queryParam, ossFileQueryParam.getPageNum(), ossFileQueryParam.getPageSize());
+        Page<OssFile> ossFiles = ossFileService.queryByPage(queryParam, ossFileQueryParam.getPageNum(), ossFileQueryParam.getPageSize(), new String[]{"id_asc", "type_asc"});
 
         return ResponseParam.success()
                 .pageParam(ossFiles)
@@ -67,6 +67,7 @@ public class OssFileController extends AppIBaseController {
     public ResponseParam save(@RequestBody OssFile ossFile) {
         Assert.notNull(ossFile.getBucketName(), "业务bucketName不能为空");
         Assert.notNull(ossFile.getName(),"名称name不能为空");
+
 
         ossFileService.saveDirectory(ossFile);
 

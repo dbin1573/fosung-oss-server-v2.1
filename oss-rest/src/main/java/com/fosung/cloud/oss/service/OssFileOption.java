@@ -141,6 +141,10 @@ public class OssFileOption {
         String OSS_IP = ossConfigProperties.getIp();
         Assert.notNull(OSS_IP, "application*.yml没有配置oss的ip");
 
+        if (!OSS_IP.startsWith("http")) {
+            OSS_IP = "http://" + OSS_IP;
+        }
+
         return isEndBreak(OSS_IP) + relativePath;
 
     }
@@ -154,7 +158,7 @@ public class OssFileOption {
      * @param bucket
      * @param directory
      * @param fileName
-     * @param relativePath 获取绝对路径或相对路径
+     * @param relativePath 是否获取绝对路径 或相对路径
      * @return
      */
     private String getFilPath(String bucket, String directory, String fileName, Boolean relativePath) {
@@ -164,6 +168,7 @@ public class OssFileOption {
             Assert.notNull(OSS_ROOT_PATH, "application*.yml没有配置oss的根路径OSS_ROOT_PATH");
             pathName.append(isEndBreak(OSS_ROOT_PATH));
         }
+
         pathName.append(isEndBreak(bucket));
         pathName.append(isEndBreak(directory));
         pathName.append(fileName);
@@ -258,11 +263,13 @@ public class OssFileOption {
 
         File file = new File(absolutePath);
 
+        boolean del = false;
         if (file.exists()) {
-            return file.delete();
+            del = file.delete();
+            Assert.isTrue(del, "删除失败: 该文件夹下可能存在文件!");
         }
 
-        return false;
+        return del;
     }
 
     public boolean deleteDir(String pathName) {

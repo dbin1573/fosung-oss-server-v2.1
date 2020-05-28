@@ -31,7 +31,7 @@ public class OssFile extends AppJpaBaseEntity {
      * 查询时使用
      */
     @Column(name = "directory")
-    String directory;
+    String directory = "/";
 
     @Column(name = "name")
     String name;
