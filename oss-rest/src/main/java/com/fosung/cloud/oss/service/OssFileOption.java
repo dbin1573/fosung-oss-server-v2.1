@@ -113,7 +113,7 @@ public class OssFileOption {
         String path = isEndBreak(bucketName) + isEndBreak(dirName) + name;
 
         boolean isCreate = createDir(path);
-        Assert.isTrue(isCreate,"创建目录失败");
+        Assert.isTrue(isCreate, "创建目录失败: 可能服务器存在此目录");
     }
 
     /**
@@ -169,7 +169,7 @@ public class OssFileOption {
             pathName.append(isEndBreak(OSS_ROOT_PATH));
         }
 
-        pathName.append(isEndBreak(bucket));
+        pathName.append(bucket);
         pathName.append(isEndBreak(directory));
         pathName.append(fileName);
 
